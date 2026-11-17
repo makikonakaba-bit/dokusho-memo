@@ -34,7 +34,12 @@
         <div class="field grow">
           <label for="title">本のタイトル</label>
           <input type="text" id="title" placeholder="例：好きを言語化する技術">
+     </div>
+          <div class="field grow">
+          <label for="author">著者</label>
+          <input type="text" id="author" placeholder="例：三宅香帆">
         </div>
+
      <div class="field when">
           <label for="date">読んだ日</label>
           <input type="date" id="date">
@@ -124,8 +129,8 @@ function showList() {
     const r = records[i];
 
     // チャレンジ2：さがす言葉が入っていないメモは、とばす
-    if (word != "" && !(r.title + r.impress + r.discover + r.compare + r.question).includes(word)) {
-      continue;
+        if (word != "" && !(r.title + r.author + r.impress + r.discover + r.compare + r.question).includes(word)) {
+        
     }
 
     let html = '<div class="card">';
@@ -133,6 +138,10 @@ function showList() {
     html += '</p>';
         html += '<div class="body">';   // ← 開くと見える中身（ここから）
     // 書いた欄だけ、見出しをつけて出す
+    if (r.author) {
+      html += '<span class="author">' + r.author + '</span>';
+    }
+
     if (r.impress != "") {
       html += '<p class="item"><span class="tag">ハイライト</span>' + r.impress + '</p>';
     }
@@ -165,6 +174,7 @@ setToday();
 // ===== 3. 「書きとめる」を押したとき =====
 $("#save").on("click", function () {
   const title = $("#title").val();
+  const author = $("#author").val();
 　const impress = $("#impress").val();
   const discover = $("#discover").val();
   const compare = $("#compare").val();
@@ -188,6 +198,7 @@ $("#save").on("click", function () {
   const record = {
     day: day,
     title: title,
+    author: author,
     impress: impress,
     discover: discover,
     compare: compare,

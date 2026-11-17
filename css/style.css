@@ -204,6 +204,7 @@ h1 { font-size: 34px; font-weight: 600; letter-spacing: .18em; margin: 4px 0 0; 
 .book { font-size: 17px; font-weight: 600; }
 .book::before { content: "「"; }   /* タイトルを「」でかこむ */
 .book::after { content: "」"; }
+.author { font-size: 14px; color: var(--soft); }   /* 著者（タイトルの横に小さく） */
 .page { font-size: 15px; color: var(--accent); }
 .item { font-size: 17px; line-height: 1.9; margin: 0 0 10px; white-space: pre-wrap; }   /* 改行をそのまま出す */
 .tag { display: block; font-size: 13px; font-weight: 600; letter-spacing: .15em; color: var(--accent); }   /* 「印象的」などの見出し */
