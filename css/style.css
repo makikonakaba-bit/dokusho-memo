@@ -202,6 +202,8 @@ h1 { font-size: 34px; font-weight: 600; letter-spacing: .18em; margin: 4px 0 0; 
 }
 .meta { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; flex-wrap: wrap; }
 .book { font-size: 18px; font-weight: 600; width: 100%; }
+.book { cursor: pointer; }                        /* タイトルにマウスをのせると、指の形になる */
+.book:hover { color: var(--accent); }             /* のせているあいだ、臙脂色にする */
 .book::before { content: "「"; }   /* タイトルを「」でかこむ */
 .book::after { content: "」"; }
 .author { font-size: 14px; color: var(--soft); }   /* 著者（タイトルの横に小さく） */
