@@ -205,6 +205,16 @@ h1 { font-size: 34px; font-weight: 600; letter-spacing: .18em; margin: 4px 0 0; 
 .book::before { content: "「"; }   /* タイトルを「」でかこむ */
 .book::after { content: "」"; }
 .author { font-size: 14px; color: var(--soft); }   /* 著者（タイトルの横に小さく） */
+
+/* 読んだ形（紙の本／Kindle）を選ぶ欄 */
+.field.kind { display: flex; align-items: flex-end; gap: 14px; padding-bottom: 6px; }
+.kind-label { font-size: 15px; letter-spacing: .1em; color: var(--soft); }
+.field.kind label { display: flex; align-items: center; gap: 4px; color: var(--ink); cursor: pointer; }
+.form input[type="radio"] { display: inline; width: auto; accent-color: var(--accent); }   /* ○の大きさを元にもどし、臙脂色にする */
+
+/* カードの「紙の本」「Kindle」の小さな札 */
+.kind-tag { font-size: 12px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 0 10px; }
+
 .page { font-size: 15px; color: var(--accent); }
 .item { font-size: 17px; line-height: 1.9; margin: 0 0 10px; white-space: pre-wrap; }   /* 改行をそのまま出す */
 .tag { display: block; font-size: 13px; font-weight: 600; letter-spacing: .15em; color: var(--accent); }   /* 「印象的」などの見出し */

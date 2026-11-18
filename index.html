@@ -45,6 +45,13 @@
           <input type="date" id="date">
         </div>
 
+    <div class="field kind">
+          <span class="kind-label">読んだ形</span>
+          <label><input type="radio" name="kind" value="紙の本" checked> 紙の本</label>
+          <label><input type="radio" name="kind" value="Kindle"> Kindle</label>
+        </div>
+  
+
 
       </div>
 
@@ -129,18 +136,21 @@ function showList() {
     const r = records[i];
 
     // チャレンジ2：さがす言葉が入っていないメモは、とばす
-        if (word != "" && !(r.title + r.author + r.impress + r.discover + r.compare + r.question).includes(word)) {
-        
+          if (word != "" && !(r.title + r.author + r.impress + r.discover + r.compare + r.question).includes(word)) {
+      continue;      
     }
+    
 
     let html = '<div class="card">';
-    html += '<p class="meta"><span class="book">' + r.title + '</span>';
-    html += '</p>';
-        html += '<div class="body">';   // ← 開くと見える中身（ここから）
-    // 書いた欄だけ、見出しをつけて出す
+     html += '<p class="meta"><span class="book">' + r.title + '</span>';
     if (r.author) {
       html += '<span class="author">' + r.author + '</span>';
     }
+    if (r.kind) {
+      html += '<span class="kind-tag">' + r.kind + '</span>';
+    }
+    html += '</p>';
+    html += '<div class="body">';   // ← 開くと見える中身（ここから）
 
     if (r.impress != "") {
       html += '<p class="item"><span class="tag">ハイライト</span>' + r.impress + '</p>';
@@ -175,7 +185,8 @@ setToday();
 $("#save").on("click", function () {
   const title = $("#title").val();
   const author = $("#author").val();
-　const impress = $("#impress").val();
+  const kind = $('input[name="kind"]:checked').val();   // 選ばれている方の value を取り出す
+  const impress = $("#impress").val();
   const discover = $("#discover").val();
   const compare = $("#compare").val();
   const question = $("#question").val();
@@ -199,6 +210,7 @@ $("#save").on("click", function () {
     day: day,
     title: title,
     author: author,
+    kind: kind,
     impress: impress,
     discover: discover,
     compare: compare,
