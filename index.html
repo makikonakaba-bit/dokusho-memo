@@ -127,6 +127,10 @@ const week = ["日", "月", "火", "水", "木", "金", "土"];
 // さがす言葉（空なら、全部出す）← チャレンジ2で使う
 let word = "";
 
+// 今直しているメモの番号（直していないときは null ＝ からっぽ）
+let editing = null;
+
+
 // ===== 2. カードを並べる =====
 function showList() {
   $("#list").html("");   // まず、いったん空にする
@@ -141,7 +145,8 @@ function showList() {
     }
     
 
-    let html = '<div class="card">';
+    let html = '<div class="card" data-index="' + i + '">';
+
      html += '<p class="meta"><span class="book">' + r.title + '</span>';
     if (r.author) {
       html += '<span class="author">' + r.author + '</span>';
@@ -166,7 +171,11 @@ function showList() {
     }
     html += '</div>';               // ← 開くと見える中身（ここまで）
     html += '<p class="date">' + r.day + '</p>';
+    html += '<div class="buttons">';
     html += '<button class="toggle" type="button">開く</button>';
+    html += '<button class="edit" type="button">直す</button>';
+    html += '</div>';
+
     html += '</div>';
     $("#list").append(html);   // カードを1枚ずつ、うしろに足す
   }
@@ -216,7 +225,18 @@ $("#save").on("click", function () {
     compare: compare,
     question: question
   };
-  records.push(record);
+   if (editing === null) {
+    // 新しいメモ → 箱のうしろに足す
+    records.push(record);
+    $("#reply").html("書きとめました。「読み返す」タブで見られます。");
+  } else {
+    // 直しているメモ → 同じ場所に上書きする
+    record.day = records[editing].day;   // 日付は、元のメモのままにする
+    records[editing] = record;
+    editing = null;                      // 直しおわったので、からっぽにもどす
+    $("#reply").html("直しました。「読み返す」タブで見られます。");
+  }
+
 
   // 箱を文字（JSON）にして、引き出しにしまう
   localStorage.setItem("dokusho", JSON.stringify(records));
@@ -228,7 +248,6 @@ $("#save").on("click", function () {
   $("#question").val("");
 
   showList();
-  $("#reply").html("書きとめました。「読み返す」タブで見られます。");
 });
 
 // ===== 4. 「全部消す」を押したとき（確認の小窓つき）=====
@@ -238,6 +257,7 @@ $("#clear").on("click", function () {
   }
   localStorage.removeItem("dokusho");
   records = [];
+  editing = null;   // 直している途中でも、からっぽにもどす
   showList();
   $("#reply").html("全部消しました。");
 });
@@ -270,6 +290,28 @@ $(".tab").on("click", function () {
 $("#write").on("input", "input, textarea", function () {
   $("#reply").html("");
 });
+
+
+// ===== 8. 「直す」を押したとき（中身を「書く」画面にもどす）=====
+$("#list").on("click", ".edit", function () {
+  const i = $(this).closest(".card").attr("data-index");   // 押されたカードの番号
+  const r = records[i];                                     // その番号のメモを取り出す
+
+  // メモの中身を、それぞれの欄に入れる
+  $("#title").val(r.title);
+  $("#author").val(r.author || "");
+  $('input[name="kind"][value="' + r.kind + '"]').prop("checked", true);
+  $("#impress").val(r.impress);
+  $("#discover").val(r.discover);
+  $("#compare").val(r.compare);
+  $("#question").val(r.question);
+
+  editing = i;   // 「今は i 番目を直している」と覚えておく
+
+  $('.tab[data-panel="write"]').click();   // 「書く」タブを押したことにする
+  $("#reply").html("「" + r.title + "」のメモを直しています。");
+});
+
 
 // =====================================================
 // ここから「チャレンジ」
