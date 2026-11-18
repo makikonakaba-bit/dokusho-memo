@@ -190,7 +190,7 @@ h1 { font-size: 34px; font-weight: 600; letter-spacing: .18em; margin: 4px 0 0; 
 #search:focus { border-color: var(--accent); }
 
 /* カードを、幅に合わせて何列かに並べる */
-#list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; align-items: start; }
+#list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; align-items: stretch; }
 .card {
 	display: flex;
 	flex-direction: column;
@@ -200,8 +200,8 @@ h1 { font-size: 34px; font-weight: 600; letter-spacing: .18em; margin: 4px 0 0; 
 	padding: 22px 24px 16px;
 	box-shadow: var(--shadow);
 }
-.meta { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
-.book { font-size: 17px; font-weight: 600; }
+.meta { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; flex-wrap: wrap; }
+.book { font-size: 17px; font-weight: 600; width: 100%; }
 .book::before { content: "「"; }   /* タイトルを「」でかこむ */
 .book::after { content: "」"; }
 .author { font-size: 14px; color: var(--soft); }   /* 著者（タイトルの横に小さく） */

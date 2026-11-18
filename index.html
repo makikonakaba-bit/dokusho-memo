@@ -263,6 +263,12 @@ $(".tab").on("click", function () {
 
   $(".panel").removeClass("now");   // 画面も同じ。全部から now をはずして
   $("#" + panel).addClass("now");   // 出したい画面にだけ now をつける
+  $("#reply").html("");             // 画面を切りかえたら、お知らせを消す
+});
+
+// ===== 7. また書きはじめたら、お知らせを消す =====
+$("#write").on("input", "input, textarea", function () {
+  $("#reply").html("");
 });
 
 // =====================================================
