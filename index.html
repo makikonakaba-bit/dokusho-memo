@@ -211,7 +211,9 @@ let editing = null;
 // ===== 2. カードを並べる =====
   function showList() {
    $("#list").html("");   // まず、いったん空にする
-   let month = "";        // 今の入れ物が何月か（はじめは、からっぽ）
+    let month = "";        // 今の入れ物が何月か（はじめは、からっぽ）
+    let books = [];        // 今の月に出てきた本のタイトル（同じ本は1回だけ入れる）
+
 
   // 新しいメモが上に来るように、うしろから順番に見ていく
 
@@ -227,9 +229,12 @@ let editing = null;
     const ym = r.date.slice(0, 7);              // "2026-11-15" → "2026-11"
     if (ym != month) {
       month = ym;                               // 「今の入れ物は、この月」と覚える
+      books = [];                               // 新しい月なので、本の箱もからっぽにする
+                              
       const y = ym.split("-")[0];               // "2026"
       const m = Number(ym.split("-")[1]);       // "11" → 11、"09" → 9（前の0をとる）
-      $("#list").append('<details class="month" open><summary>' + y + '年' + m + '月</summary><div class="cards"></div></details>');
+      $("#list").append('<details class="month" open><summary>' + y + '年' + m + '月<span class="count"></span></summary><div class="cards"></div></details>');
+
     }
 
     let html = '<div class="card" data-index="' + i + '">';
@@ -262,11 +267,19 @@ let editing = null;
     html += '<div class="buttons">';
     html += '<button class="toggle" type="button">開く</button>';
     html += '<button class="edit" type="button">直す</button>';
-    html += '<button class="delete" type="button">消す</button>';
-    html += '</div>';
+        html += '<button class="delete" type="button">消す</button>';
+    html += '</div>';   // ボタンの箱を閉じる
 
-    html += '</div>';
-       $("#list .cards").last().append(html);   // いちばん最後に作った入れ物に、カードを足す
+    html += '</div>';   // カードを閉じる
+    $("#list .cards").last().append(html);   // いちばん最後に作った入れ物に、カードを足す
+
+
+    // この月の冊数を数える
+    if (!books.includes(r.title)) {   // まだ箱に入っていない本なら
+      books.push(r.title);            // 箱に入れる
+    }
+    $("#list .count").last().text(books.length + "冊");   // いちばん最後の月の見出しに、冊数を書く
+
 
     　}
 }

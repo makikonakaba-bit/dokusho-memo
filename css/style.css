@@ -203,8 +203,10 @@ h1 { font-size: 42px; font-weight: 600; letter-spacing: .18em; margin: 0; }
 	letter-spacing: .1em;
 	padding: 8px 0;
 	margin-bottom: 14px;
-	border-bottom: 1px solid var(--line);
-}
+		border-bottom: 1px solid var(--line);
+}	
+.count { font-size: 13px; color: var(--soft); margin-left: 10px; letter-spacing: 0; }   /* 「2冊」は、小さくうすい色で */
+
 
 .card {
 	display: flex;
