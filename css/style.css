@@ -192,8 +192,20 @@ h1 { font-size: 42px; font-weight: 600; letter-spacing: .18em; margin: 0; }
 }
 #search:focus { border-color: var(--accent); }
 
-/* カードを、幅に合わせて何列かに並べる */
-#list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; align-items: stretch; }
+/* カードを、幅に合わせて何列かに並べる（月ごとの入れ物の中で） */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; align-items: stretch; }
+
+/* 月ごとのまとまり */
+.month { margin-bottom: 24px; }
+.month summary {
+	cursor: pointer;
+	color: var(--accent);
+	letter-spacing: .1em;
+	padding: 8px 0;
+	margin-bottom: 14px;
+	border-bottom: 1px solid var(--line);
+}
+
 .card {
 	display: flex;
 	flex-direction: column;
