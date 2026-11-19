@@ -127,7 +127,31 @@ if (saved) {
   records = JSON.parse(saved);   // 文字（JSON）を、箱（配列）にもどす
 }
 
+// 前に書いたメモには date がないので、day の文字から作る
+// 例： "2026年9月4日（金）" → "2026-09-04"
+for (let i = 0; i < records.length; i++) {
+  const r = records[i];
+  if (!r.date) {
+    const y = r.day.split("年")[0];                                    // "2026"
+    const m = r.day.split("年")[1].split("月")[0].padStart(2, "0");    // "9" → "09"
+    const d = r.day.split("月")[1].split("日")[0].padStart(2, "0");    // "4" → "04"
+    r.date = y + "-" + m + "-" + d;                                    // "2026-09-04"
+  }
+}
+
+// 箱の中を、読んだ日の古い順に並べかえる（画面にはうしろから出すので、新しい日が上になる）
+function sortByDate() {
+  records.sort(function (a, b) {
+    if (a.date < b.date) return -1;   // a のほうが古い → a を前に
+    if (a.date > b.date) return 1;    // a のほうが新しい → a をうしろに
+    return 0;                         // 同じ日 → 書きとめた順のまま
+  });
+}
+sortByDate();   // ページを開いたときに、並べかえておく
+
 // 曜日の配列（授業の Date と同じ）
+
+
 const week = ["日", "月", "火", "水", "木", "金", "土"];
 
 
@@ -271,6 +295,7 @@ $("#save").on("click", function () {
   // 1つ分を、ひとつの荷物（オブジェクト）にまとめて、箱に入れる
   const record = {
     day: day,
+    date: $("#date").val(),   // 比べるための日付（「2026-11-15」の形）
     title: title,
     author: author,
     kind: kind,
@@ -286,14 +311,17 @@ $("#save").on("click", function () {
   } else {
     // 直しているメモ → 同じ場所に上書きする
     record.day = records[editing].day;   // 日付は、元のメモのままにする
+    record.date = records[editing].date; // 比べるための日付も、元のままにする
     records[editing] = record;
     editing = null;                      // 直しおわったので、からっぽにもどす
     $("#reply").html("直しました。「読み返す」タブで見られます。");
   }
 
+  sortByDate();   // 前の日付のメモを書いても、正しい場所に入るように並べかえる
 
   // 箱を文字（JSON）にして、引き出しにしまう
   localStorage.setItem("dokusho", JSON.stringify(records));
+
 
   // タイトルは残して（同じ本を続けて書くことが多いので）、ほかの欄を空にする
   $("#impress").val("");
