@@ -227,11 +227,12 @@ function showList() {
     html += '<div class="buttons">';
     html += '<button class="toggle" type="button">開く</button>';
     html += '<button class="edit" type="button">直す</button>';
+    html += '<button class="delete" type="button">消す</button>';
     html += '</div>';
 
     html += '</div>';
     $("#list").append(html);   // カードを1枚ずつ、うしろに足す
-  }
+    　}
 }
 
 showList();   // ページを開いたときに、しまってあったメモを並べる
@@ -366,7 +367,24 @@ $("#list").on("click", ".edit", function () {
 });
 
 
+// ===== 10. 「消す」を押したとき（1枚だけ消す・確認の小窓つき）=====
+$("#list").on("click", ".delete", function () {
+  const i = $(this).closest(".card").attr("data-index");   // 押されたカードの番号
+  const r = records[i];                                     // その番号のメモ
+
+  if (!confirm("「" + r.title + "」のメモを1枚消しますか？\n消したメモは、元に戻せません。")) {
+    return;   // 「キャンセル」なら、ここで終わり
+  }
+
+  records.splice(i, 1);                                     // 箱の i 番目から、1つだけ取りのぞく
+  localStorage.setItem("dokusho", JSON.stringify(records)); // 減った箱を、引き出しにしまいなおす
+  editing = null;                                           // 直している途中でも、からっぽにもどす
+  showList();                                               // カードを並べなおす
+});
+
+
 // ===== 9. 本のタイトルを押したとき（その本のメモだけを並べる）=====
+
 $("#list").on("click", ".book", function () {
   word = $(this).text();      // 押されたタイトルの文字を、さがす言葉にする
   $("#search").val(word);     // さがす欄にも、同じ文字を出しておく
