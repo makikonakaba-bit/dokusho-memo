@@ -106,8 +106,20 @@
     <!-- チャレンジ2：言葉でさがす -->
     <input type="search" id="search" placeholder="言葉でさがす（例：言語化）">
 
+    <!-- 積読リスト：手もとにあるけれど、まだ読んでいない本 -->
+    <div class="tsundoku">
+      <p class="tsundoku-head">積読リスト</p>
+      <ul id="tsundoku-list"></ul>
+      <div class="tsundoku-add">
+        <input type="text" id="tsundoku-title" placeholder="本のタイトル">
+        <input type="text" id="tsundoku-author" placeholder="著者">
+        <button class="tsundoku-btn" id="tsundoku-save" type="button">足す</button>
+      </div>
+    </div>
+
     <!-- メモのカードを並べるところ -->
     <div id="list"></div>
+
 
     <button class="link" id="clear" type="button">全部消す</button>
   </section>
@@ -441,8 +453,68 @@ $("#list").on("click", ".delete", function () {
 $("#list").on("click", ".book", function () {
   word = $(this).text();      // 押されたタイトルの文字を、さがす言葉にする
   $("#search").val(word);     // さがす欄にも、同じ文字を出しておく
-  showList();                 // カードを並べなおす
+   showList();                 // カードを並べなおす
 });
+
+
+// ===== 11. 積読リスト =====
+// 積読の箱を用意して、引き出し（"tsundoku"）から取り出す
+let tsundoku = [];
+const savedTsundoku = localStorage.getItem("tsundoku");
+if (savedTsundoku) {
+  tsundoku = JSON.parse(savedTsundoku);   // 文字（JSON）を、箱（配列）にもどす
+}
+
+// 積読リストを並べる
+function showTsundoku() {
+  $("#tsundoku-list").html("");   // まず、いったん空にする
+
+  for (let i = 0; i < tsundoku.length; i++) {   // 足した順に、前から見ていく
+    const t = tsundoku[i];
+    let html = '<li data-index="' + i + '">「' + t.title + '」';
+    if (t.author) {
+      html += '<span class="author">' + t.author + '</span>';
+    }
+    html += '<button class="tsundoku-del" type="button">消す</button>';
+    html += '</li>';
+
+    $("#tsundoku-list").append(html);   // 1冊ずつ、うしろに足す
+  }
+}
+showTsundoku();   // ページを開いたときに、しまってあった本を並べる
+
+// 「足す」を押したとき
+$("#tsundoku-save").on("click", function () {
+  const title = $("#tsundoku-title").val();
+  const author = $("#tsundoku-author").val();
+
+  if (title == "") {
+    return;   // タイトルが空なら、何もしない
+  }
+
+  tsundoku.push({ title: title, author: author });                 // 荷物にまとめて、箱に入れる
+  localStorage.setItem("tsundoku", JSON.stringify(tsundoku));      // 箱を文字にして、引き出しにしまう
+
+  $("#tsundoku-title").val("");    // 欄を空にもどす
+  $("#tsundoku-author").val("");
+  showTsundoku();                  // 並べなおす
+});
+
+// 積読リストの「消す」を押したとき
+$("#tsundoku-list").on("click", ".tsundoku-del", function () {
+  const i = $(this).closest("li").attr("data-index");   // 押された行の番号
+  const t = tsundoku[i];                                 // その番号の本
+
+  if (!confirm("「" + t.title + "」を積読リストから消しますか？")) {
+    return;   // 「キャンセル」なら、ここで終わり
+  }
+
+  tsundoku.splice(i, 1);                                        // 箱の i 番目から、1つだけ取りのぞく
+  localStorage.setItem("tsundoku", JSON.stringify(tsundoku));   // 減った箱を、引き出しにしまいなおす
+  showTsundoku();                                               // 並べなおす
+});
+
+
 
 
 

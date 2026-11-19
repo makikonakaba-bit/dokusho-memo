@@ -192,6 +192,48 @@ h1 { font-size: 42px; font-weight: 600; letter-spacing: .18em; margin: 0; }
 }
 #search:focus { border-color: var(--accent); }
 
+/* ===== 積読リスト ===== */
+.tsundoku {
+	border: 1px dashed var(--accent);   /* 点線の枠 */
+	border-radius: 4px;
+	padding: 14px 18px;
+	margin-bottom: 28px;
+}
+.tsundoku-head { margin: 0 0 8px; color: var(--accent); font-weight: 700; letter-spacing: .1em; }
+#tsundoku-list { margin: 0 0 10px; padding-left: 1.2em; }
+#tsundoku-list li { margin: 4px 0; }
+#tsundoku-list .author { margin-left: 12px; }   /* 著者は、タイトルから少しはなす */
+.tsundoku-del {
+	background: transparent;
+	border: none;
+	margin-left: 12px;
+	font-family: inherit;
+	font-size: 13px;
+	color: var(--soft);
+	cursor: pointer;
+}
+.tsundoku-del:hover { color: var(--accent); text-decoration: underline; }   /* カードの「消す」と同じ */
+
+.tsundoku-add { display: flex; gap: 8px; flex-wrap: wrap; }   /* 欄とボタンを横に並べる（せまいと折りかえす） */
+.tsundoku-add input {
+	flex: 1;
+	min-width: 140px;
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	padding: 6px 10px;
+	font-family: inherit;
+	background: var(--paper);
+}
+.tsundoku-btn {
+	background: transparent;
+	border: 1px solid var(--accent);
+	border-radius: 999px;
+	padding: 4px 18px;
+	font-family: inherit;
+	color: var(--accent);
+	cursor: pointer;
+}
+
 /* カードを、幅に合わせて何列かに並べる（月ごとの入れ物の中で） */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; align-items: stretch; }
 
